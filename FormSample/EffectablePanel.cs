@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,128 +16,90 @@ namespace FormSample
 {
     public partial class EffectablePanel : Panel
     {
+        public enum EffectType { Fading, NONE };
+
+        private ArrayList effectType = null;
+
         public EffectablePanel()
         {
             InitializeComponent();
-            //this.BackColor = Color.Red;
+            this.BackColor = Color.White;
+            CreateEffectInstance();
         }
 
-        public void StartScreenTransition(ref Panel before, Boolean doEffect)
+        private void CreateEffectInstance()
         {
-            Bitmap bmp = CapturePanel(ref before, true);
-            Graphics g = this.CreateGraphics();
+            effectType = new ArrayList();
+            effectType.Add(new FadingEffect());     // Fading
+            effectType.Add(new DefaultEffect());    // NONE
+        }
 
-            //this.Visible = true;
-
-            // フェードアウト
-            for (int i = 10; i >= 1; i--)
+        public void TransPanel(Panel current, Panel next, EffectType type)
+        {
+            try
             {
+                Console.WriteLine(current.Name + " -> " + next.Name);
+
+                // 遷移前Panelをキャプチャ
+                Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
+                Bitmap nextBmp = null;
+                Graphics g = this.CreateGraphics();
+
+                // 遷移後画面を取得
+                string nextBmpPath = next.Name + ".bmp";
+                if (System.IO.File.Exists(nextBmpPath))
+                {
+                    Console.WriteLine("NOT first time.");
+                    nextBmp = new Bitmap(nextBmpPath);
+                }
+                else
+                {
+                    Console.WriteLine("first time.");
+                    nextBmp = GetPreviousCapturedImage(next, nextBmpPath, true); // 初回のみ
+                }
+
+                // effectスタート
                 this.Visible = true;
 
-                // 半透明で画像を描画
-                DrawFadedImage(g, bmp, i * 0.1F);
-                Application.DoEvents();
+                current.Visible = false;
 
-                Thread.Sleep(50);
+                FadingEffect effectInstance = effectType[(int)type] as FadingEffect;
+                effectInstance.DrawEffectImage(currentBmp, nextBmp, g);
+
+                next.Visible = true;
+
+                // effect終わり
+                this.Visible = false;
+
+                currentBmp.Dispose();
+                nextBmp.Dispose();
+                g.Dispose();
             }
-
-            bmp.Dispose();
-            g.Dispose();
-        }
-
-        public void EndScreenTransition(ref Panel after)
-        {
-            after.Visible = true;   // 先にVisibleにしておく
-
-            Bitmap bmp = CapturePanel(ref after, false);
-            Graphics g = this.CreateGraphics();
-
-            // フェードイン
-            for (int i = 0; i <= 9; i++)
+            catch (SystemException ex)
             {
-                // 半透明で画像を描画
-                DrawFadedImage(g, bmp, i * 0.1F);
-                Application.DoEvents();
-
-                // 一時停止
-                Thread.Sleep(50);
+                Console.WriteLine(ex.Message);
             }
-
-            this.Visible = false;
-
-            bmp.Dispose();
-            g.Dispose();
         }
 
-        //public void ScreenTransition(ref Panel before, ref Panel after, Boolean doEffect)
-        //{
-        //    CapturePanel(ref before, true);
-        //    CapturePanel(ref after, false);
-
-        //    // effect
-        //    this.Visible = true;
-        //    //before.SendToBack();
-        //    //before.Visible = false;
-        //    Thread.Sleep(300);
-        //    after.Visible = true;
-        //    this.Visible = false;
-        //}
-
-        private static void DrawFadedImage(Graphics g, Image img, float alpha)
-        {
-            // 背景を用意する
-            Bitmap back = new Bitmap(img.Width, img.Height);
-            // backのGraphicsオブジェクトを取得
-            Graphics bg = Graphics.FromImage(back);
-            // 白で塗りつぶす
-            bg.Clear(Color.White);
-
-            // ColorMatrixオブジェクトの作成
-            ColorMatrix cm = new ColorMatrix();
-            // ColorMatrixの行列の値を変更して、アルファ値がalphaに変更されるようにする
-            cm.Matrix00 = 1;
-            cm.Matrix11 = 1;
-            cm.Matrix22 = 1;
-            cm.Matrix33 = alpha;
-            cm.Matrix44 = 1;
-
-            // ImageAttributeオブジェクトの作成
-            ImageAttributes ia = new ImageAttributes();
-            // ColorMatrixを設定する
-            ia.SetColorMatrix(cm);
-
-            // ImageAttributesを使用して背景に描画
-            bg.DrawImage(img, new Rectangle(0, 0, img.Width, img.Height),
-                0, 0, img.Width, img.Height, GraphicsUnit.Pixel, ia);
-            // 合成された画像を表示
-            g.DrawImage(back, 0, 0);
-
-            // リソースを開放する
-            bg.Dispose();
-            back.Dispose();
-
-        }
-
-        private Bitmap CapturePanel(ref Panel panel, Boolean before)
+        private Bitmap GetPreviousCapturedImage(Panel panel, string filePath, Boolean firstTime)
         {
             Rectangle rect = RectangleToScreen(panel.Bounds);
             Bitmap bmp = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);
 
-            if (before)
+            if (firstTime)
+            {
+                panel.DrawToBitmap(bmp, panel.Bounds);
+            }
+            else
             {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
                     g.CopyFromScreen(rect.X, rect.Y, 0, 0, rect.Size, CopyPixelOperation.SourceCopy);
                 }
-                bmp.Save(@"before.bmp", ImageFormat.Bmp);
             }
-            else
-            {
-                panel.DrawToBitmap(bmp, panel.Bounds);
-                //panel.DrawToBitmap(bmp, new Rectangle(0, 0, panel.Bounds.Width, panel.Bounds.Height));
-                bmp.Save(@"after.bmp", ImageFormat.Bmp);
-            }
+            bmp.Save(filePath, ImageFormat.Bmp);    // 保存する場合
             return bmp;
         }
+
     }
 }

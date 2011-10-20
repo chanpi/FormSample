@@ -68,6 +68,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultEffect.cs" />
+    <Compile Include="FadingEffect.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
