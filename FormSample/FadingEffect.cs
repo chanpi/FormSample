@@ -12,7 +12,7 @@ namespace FormSample
 {
     public class FadingEffect : DefaultEffect
     {
-        public void DrawEffectImage(Bitmap before, Bitmap after, Graphics g)
+        public override void DrawEffectImage(Bitmap before, Bitmap after, Graphics g)
         {
             try
             {

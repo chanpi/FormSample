@@ -25,7 +25,7 @@ namespace FormSample
             panelList.Add(panel2);
             panelList.Add(panel3);
 
-            // 初回のみ、初期画面
+            // 最初に表示するPanel以外はあらかじめ非表示にしておく
             panel2.Visible = false;
             panel3.Visible = false;
             panelCount = panelList.Count;

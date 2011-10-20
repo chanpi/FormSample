@@ -6,11 +6,8 @@ using System.Text;
 
 namespace FormSample
 {
-    public class DefaultEffect
+    public abstract class DefaultEffect
     {
-        public void DrawEffectImage(Bitmap before, Bitmap after, Graphics g)
-        {
-
-        }
+        public abstract void DrawEffectImage(Bitmap before, Bitmap after, Graphics g);
     }
 }

@@ -16,30 +16,18 @@ namespace FormSample
 {
     public partial class EffectablePanel : Panel
     {
-        public enum EffectType { Fading, NONE };
-
-        private ArrayList effectType = null;
+        public enum EffectType { Fading, None };
 
         public EffectablePanel()
         {
             InitializeComponent();
             this.BackColor = Color.White;
-            CreateEffectInstance();
-        }
-
-        private void CreateEffectInstance()
-        {
-            effectType = new ArrayList();
-            effectType.Add(new FadingEffect());     // Fading
-            effectType.Add(new DefaultEffect());    // NONE
         }
 
         public void TransPanel(Panel current, Panel next, EffectType type)
         {
             try
             {
-                Console.WriteLine(current.Name + " -> " + next.Name);
-
                 // 遷移前Panelをキャプチャ
                 Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
                 Bitmap nextBmp = null;
@@ -49,12 +37,10 @@ namespace FormSample
                 string nextBmpPath = next.Name + ".bmp";
                 if (System.IO.File.Exists(nextBmpPath))
                 {
-                    Console.WriteLine("NOT first time.");
                     nextBmp = new Bitmap(nextBmpPath);
                 }
                 else
                 {
-                    Console.WriteLine("first time.");
                     nextBmp = GetPreviousCapturedImage(next, nextBmpPath, true); // 初回のみ
                 }
 
@@ -63,8 +49,18 @@ namespace FormSample
 
                 current.Visible = false;
 
-                FadingEffect effectInstance = effectType[(int)type] as FadingEffect;
-                effectInstance.DrawEffectImage(currentBmp, nextBmp, g);
+                DefaultEffect effect = null;
+                switch (type) {
+                    case EffectType.Fading:
+                        effect = new FadingEffect();
+                        break;
+
+                    case EffectType.None:
+                    default:
+                        effect = new NoneEffect();
+                        break;
+                }
+                effect.DrawEffectImage(currentBmp, nextBmp, g);
 
                 next.Visible = true;
 
