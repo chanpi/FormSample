@@ -17,6 +17,8 @@ namespace FormSample
     public partial class EffectablePanel : Panel
     {
         public enum EffectType { Fading, None };
+        private ArrayList effects = null;
+        //private Hashtable bmpContainer = null;
 
         public EffectablePanel(Form form)
         {
@@ -26,23 +28,33 @@ namespace FormSample
             Rectangle clientRectangle = form.ClientRectangle;
             this.Location = clientRectangle.Location;
             this.Size = clientRectangle.Size;
-            this.BackColor = Color.White;
+            this.BackColor = Color.Red;                 // Test TODO : Delete
+            this.SetStyle(ControlStyles.Opaque, true);  // 背景を描画しない（ちらつきの抑制）
 
             this.BringToFront();
             this.Visible = false;
+
+            // エフェクト効果を行う
+            CreateEffectInstances();
+        }
+
+        private void CreateEffectInstances()
+        {
+            effects = new ArrayList();
+            effects.Add(new FadingEffect());
+            effects.Add(new NoneEffect());
         }
 
         public void Transition(Panel current, Panel next, EffectType type)
         {
             try
             {
-                // 遷移前Panelをキャプチャ
-                Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
-
                 Bitmap nextBmp = null;
                 Graphics g = this.CreateGraphics();
 
-                // 遷移後画面を取得
+                // 遷移前Panelをキャプチャ
+                Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
+
                 string nextBmpPath = next.Name + ".bmp";
                 if (System.IO.File.Exists(nextBmpPath))
                 {
@@ -58,20 +70,10 @@ namespace FormSample
 
                 current.Visible = false;
 
-                DefaultEffect effect = null;
-                switch (type) {
-                    case EffectType.Fading:
-                        effect = new FadingEffect();
-                        break;
+                DefaultEffect effect = effects[(int)type] as DefaultEffect;
 
-                    case EffectType.None:
-                    default:
-                        effect = new NoneEffect();
-                        break;
-                }
                 // effectを実行
                 effect.DrawEffectImage(currentBmp, nextBmp, g);
-                //this.Update();
 
                 next.Visible = true;
 
@@ -95,6 +97,7 @@ namespace FormSample
 
             if (firstTime)
             {
+                panel.Refresh();
                 panel.DrawToBitmap(bmp, panel.Bounds);
             }
             else
