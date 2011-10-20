@@ -12,7 +12,7 @@ namespace FormSample
 {
     public class FadingEffect : DefaultEffect
     {
-        public override void DrawEffectImage(Bitmap before, Bitmap after, Graphics g)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, Graphics g)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace FormSample
                 for (int i = 10; i >= 1; i--)
                 {
                     // 半透明で画像を描画
-                    DrawFadedImage(g, before, i * 0.1F);
+                    DrawFadedImage(g, current, i * 0.1F);
                     Application.DoEvents();
 
                     Thread.Sleep(50);
@@ -30,7 +30,7 @@ namespace FormSample
                 for (int i = 0; i <= 9; i++)
                 {
                     // 半透明で画像を描画
-                    DrawFadedImage(g, after, i * 0.1F);
+                    DrawFadedImage(g, next, i * 0.1F);
                     Application.DoEvents();
 
                     // 一時停止
@@ -38,8 +38,8 @@ namespace FormSample
                 }
 
 
-                before.Dispose();
-                after.Dispose();
+                current.Dispose();
+                next.Dispose();
                 g.Dispose();
             }
             catch(SystemException ex)

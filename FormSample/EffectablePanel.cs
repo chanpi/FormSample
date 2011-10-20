@@ -18,18 +18,27 @@ namespace FormSample
     {
         public enum EffectType { Fading, None };
 
-        public EffectablePanel()
+        public EffectablePanel(Form form)
         {
             InitializeComponent();
+            this.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            Rectangle clientRectangle = form.ClientRectangle;
+            this.Location = clientRectangle.Location;
+            this.Size = clientRectangle.Size;
             this.BackColor = Color.White;
+
+            this.BringToFront();
+            this.Visible = false;
         }
 
-        public void TransPanel(Panel current, Panel next, EffectType type)
+        public void Transition(Panel current, Panel next, EffectType type)
         {
             try
             {
                 // 遷移前Panelをキャプチャ
                 Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
+
                 Bitmap nextBmp = null;
                 Graphics g = this.CreateGraphics();
 
@@ -60,7 +69,9 @@ namespace FormSample
                         effect = new NoneEffect();
                         break;
                 }
+                // effectを実行
                 effect.DrawEffectImage(currentBmp, nextBmp, g);
+                //this.Update();
 
                 next.Visible = true;
 

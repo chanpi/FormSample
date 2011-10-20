@@ -12,8 +12,8 @@ namespace FormSample
 {
     public partial class Form1 : Form
     {
-        private ArrayList panelList = new ArrayList();
-        private EffectablePanel myPanel = new EffectablePanel();
+        private ArrayList panelList = null;
+        private EffectablePanel myPanel = null;
         private int panelIndex = 0;
         private int panelCount = 0;
 
@@ -21,6 +21,7 @@ namespace FormSample
         {
             InitializeComponent();
 
+            panelList = new ArrayList();
             panelList.Add(panel1);
             panelList.Add(panel2);
             panelList.Add(panel3);
@@ -29,27 +30,21 @@ namespace FormSample
             panel2.Visible = false;
             panel3.Visible = false;
             panelCount = panelList.Count;
+
+            // エフェクト用のPanelを作成
+            myPanel = new EffectablePanel(this);
+            this.Controls.Add(myPanel);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            // 遷移前、遷移後のPanelとエフェクトのタイプを指定する
             Panel current = panelList[panelIndex] as Panel;
             if (++panelIndex >= panelCount) {
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            myPanel.TransPanel(current, next, EffectablePanel.EffectType.Fading);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            myPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            myPanel.Location = new System.Drawing.Point(0, 0);
-            myPanel.Width = this.Bounds.Width;
-            myPanel.Height = this.Bounds.Height;
-            myPanel.Visible = false;
-            this.Controls.Add(myPanel);
-            myPanel.BringToFront();
+            myPanel.Transition(current, next, EffectablePanel.EffectType.Fading);
         }
     }
 }
