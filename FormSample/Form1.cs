@@ -47,6 +47,8 @@ namespace FormSample
             myPanel.Transition(current, next, EffectablePanel.EffectType.Fading);
         }
 
+        #region EffectablePanelの描画を補助するイベントメソッド（Timer関連）
+
         // Resize開始
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -57,6 +59,7 @@ namespace FormSample
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             TimerStart();
+            //myPanel.SetSize(this);
         }
 
         // 最大化・最小化に対応(Form1_ResizeEndでは最大化・最小化イベントに対応できない)
@@ -96,6 +99,7 @@ namespace FormSample
                 Console.WriteLine("Timer is Stopped.");
             }
         }
+        #endregion
 
     }
 }

@@ -99,18 +99,50 @@ namespace FormSample
 
             if (firstTime)
             {
-                panel.Refresh();
+                Application.DoEvents();
+
+                // 再帰的にコンテナ及びコントロールをキャプチャ
                 panel.DrawToBitmap(bmp, panel.Bounds);
+
+                ArrayList controls = GetAllControls(panel);
+                controls.Reverse(); // 背面から
+                foreach (Control c in controls)
+                {
+                    Rectangle rc = c.Bounds;
+                    Control tmp = c;
+                    while (tmp.Bounds.Location != panel.Bounds.Location)
+                    {
+                        rc.X += tmp.Parent.Bounds.Location.X;
+                        rc.Y += tmp.Parent.Bounds.Location.Y;
+                        tmp = tmp.Parent;
+                    }
+                    c.DrawToBitmap(bmp, rc);
+                }
             }
             else
             {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.CopyFromScreen(rect.X, rect.Y, 0, 0, rect.Size, CopyPixelOperation.SourceCopy);
-                }
+                //using (Graphics g = Graphics.FromImage(bmp))
+                //{
+                //    //panel.Refresh();
+                //    //Application.DoEvents();
+                //    //panel.DrawToBitmap(bmp, panel.Bounds);
+                //    //g.CopyFromScreen(rect.X, rect.Y, 0, 0, rect.Size, CopyPixelOperation.SourceCopy);
+                //}
+                CaptureControl(panel, ref bmp);
             }
             bmp.Save(filePath, ImageFormat.Bmp);    // 保存する場合
             return bmp;
+        }
+
+        private ArrayList GetAllControls(Control top)
+        {
+            ArrayList buf = new ArrayList();
+            foreach (Control c in top.Controls)
+            {
+                buf.AddRange(GetAllControls(c));
+                buf.Add(c);
+            }
+            return buf;
         }
 
         public void SetSize(Form form)
@@ -121,6 +153,25 @@ namespace FormSample
 
             this.Update();
             Application.DoEvents();
+        }
+
+
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        private extern static bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+
+        /// <summary>
+        /// コントロールのイメージを取得する
+        /// </summary>
+        /// <param name="ctrl">キャプチャするコントロール</param>
+        /// <returns>取得できたイメージ</returns>
+        public Bitmap CaptureControl(Control ctrl, ref Bitmap bmp)
+        {
+            Graphics memg = Graphics.FromImage(bmp);
+            IntPtr dc = memg.GetHdc();
+            PrintWindow(ctrl.Handle, dc, 0);
+            memg.ReleaseHdc(dc);
+            memg.Dispose();
+            return bmp;
         }
     }
 }
