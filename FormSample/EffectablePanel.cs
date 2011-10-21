@@ -69,16 +69,16 @@ namespace Effectable
             effectList.Add(new EpL2RSlidingEffect());
         }
 
-        public void Transition(Panel current, Panel next)
+        public void Transition(ref Panel current, ref Panel next)
         {
-            Transition(current, next, EffectType.Random);
+            Transition(ref current, ref next, EffectType.Random);
         }
 
-        public void Transition(Panel current, Panel next, EffectType type)
+        public void Transition(ref Panel current, ref Panel next, EffectType type)
         {
-            Bitmap currentBitmap;
-            Bitmap nextBitmap;
-            EpDefaultEffect effect;
+            Bitmap currentBitmap = null;
+            Bitmap nextBitmap = null;
+            EpDefaultEffect effect = null;
 
             try
             {
@@ -99,16 +99,20 @@ namespace Effectable
                 this.Visible = true;                                // effectスタート
                 current.Visible = false;
 
-                if (type == EffectType.Random) {
+                if (type == EffectType.Random)
+                {
                     type = (EffectType)random.Next(effectList.Count);
                 }
 
-                Console.WriteLine(type.ToString());
-
+                //Console.WriteLine(type.ToString());
                 effect = effectList[(int)type] as EpDefaultEffect;  // effectを実行
+                Console.WriteLine(type.ToString() + " Effect Start.");
                 effect.DrawEffectImage(currentBitmap, nextBitmap, this);
+                Console.WriteLine("Effect Done.");
 
                 next.Visible = true;
+                next.Refresh();
+
                 this.Visible = false;                               // effect終わり
 
                 currentBitmap.Dispose();
@@ -123,35 +127,43 @@ namespace Effectable
         private Bitmap GetPreviousCapturedImage(Panel panel, string filePath, Boolean firstTime)
         {
             Rectangle rectangle;
-            Bitmap bitmap;
-            ArrayList controls;
+            Bitmap bitmap = null;
+            ArrayList controls = null;
 
-            rectangle = RectangleToScreen(panel.Bounds);
-            bitmap = new Bitmap(rectangle.Width, rectangle.Height, PixelFormat.Format32bppArgb);
-            if (firstTime)
+            try
             {
-                panel.DrawToBitmap(bitmap, panel.Bounds);   // 再帰的にコンテナ及びコントロールをキャプチャ
-
-                controls = GetAllControls(panel);
-                controls.Reverse(); // 背面から
-                foreach (Control c in controls)
+                rectangle = RectangleToScreen(panel.Bounds);
+                bitmap = new Bitmap(rectangle.Width, rectangle.Height, PixelFormat.Format32bppArgb);
+                if (firstTime)
                 {
-                    Rectangle rectangle2 = c.Bounds;
-                    Control control = c;
-                    while (control.Bounds.Location != panel.Bounds.Location)
+                    panel.DrawToBitmap(bitmap, panel.Bounds);   // 再帰的にコンテナ及びコントロールをキャプチャ
+
+                    controls = GetAllControls(panel);
+                    controls.Reverse(); // 背面から
+                    foreach (Control c in controls)
                     {
-                        rectangle2.X += control.Parent.Bounds.Location.X;
-                        rectangle2.Y += control.Parent.Bounds.Location.Y;
-                        control = control.Parent;
+                        Rectangle rectangle2 = c.Bounds;
+                        Control control = c;
+                        while (control.Bounds.Location != panel.Bounds.Location)
+                        {
+                            rectangle2.X += control.Parent.Bounds.Location.X;
+                            rectangle2.Y += control.Parent.Bounds.Location.Y;
+                            control = control.Parent;
+                        }
+                        c.DrawToBitmap(bitmap, rectangle2);
                     }
-                    c.DrawToBitmap(bitmap, rectangle2);
                 }
+                else
+                {
+                    CaptureControls(panel, ref bitmap);
+                }
+                bitmap.Save(filePath, ImageFormat.Bmp);    // 保存する場合
             }
-            else
+            catch (SystemException ex)
             {
-                CaptureControls(panel, ref bitmap);
+                Console.WriteLine(ex.Message);
             }
-            bitmap.Save(filePath, ImageFormat.Bmp);    // 保存する場合
+
             return bitmap;
         }
 

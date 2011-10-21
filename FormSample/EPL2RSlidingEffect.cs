@@ -47,9 +47,9 @@ namespace Effectable
 
                     bg.DrawImage(current, 0, 0);
                     effectablePanel.pictureBox.Image = doubleBufferingBitmap;
-                    effectablePanel.Refresh();
+                    effectablePanel.pictureBox.Refresh();
 
-                    Application.DoEvents();
+                    //Application.DoEvents();
                     matrix.Dispose();
                 }
 

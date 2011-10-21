@@ -44,8 +44,8 @@ namespace FormSample
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            myPanel.Transition(current, next, Effectable.EffectablePanel.EffectType.Fading);
-            //myPanel.Transition(current, next);
+            //myPanel.Transition(ref current, ref next, Effectable.EffectablePanel.EffectType.Fading);
+            myPanel.Transition(ref current, ref next);
         }
 
         #region EffectablePanelの描画を補助するイベントメソッド（Timer関連）
