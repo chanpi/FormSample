@@ -44,7 +44,7 @@ namespace FormSample
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            //myPanel.Transition(ref current, ref next, Effectable.EffectablePanel.EffectType.Fading);
+            //myPanel.Transition(ref current, ref next, Effectable.EffectablePanel.EffectType.L2RSliding);
             myPanel.Transition(ref current, ref next);
         }
 

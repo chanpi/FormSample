@@ -104,11 +104,8 @@ namespace Effectable
                     type = (EffectType)random.Next(effectList.Count);
                 }
 
-                //Console.WriteLine(type.ToString());
                 effect = effectList[(int)type] as EpDefaultEffect;  // effectを実行
-                Console.WriteLine(type.ToString() + " Effect Start.");
                 effect.DrawEffectImage(currentBitmap, nextBitmap, this);
-                Console.WriteLine("Effect Done.");
 
                 next.Visible = true;
                 next.Refresh();
