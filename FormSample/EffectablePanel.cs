@@ -12,13 +12,13 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Threading;
 
-namespace FormSample
+namespace Effectable
 {
     public partial class EffectablePanel : Panel
     {
-        public enum EffectType { Fading, L2RSliding, Rotating, None };
-        private ArrayList effects = null;
-        private Hashtable bmpContainer = null;
+        public enum EffectType { Fading, Rotating, L2RSliding, None, Random };
+        private ArrayList effectList = null;
+        private Hashtable bitmapTable = null;
 
         public PictureBox pictureBox = null;
 
@@ -48,52 +48,58 @@ namespace FormSample
             // エフェクト効果を行うクラスのインスタンスを生成
             CreateEffectInstances();
 
-            bmpContainer = new Hashtable();
+            bitmapTable = new Hashtable();
         }
 
         private void CreateEffectInstances()
         {
-            effects = new ArrayList();
-            effects.Add(new EPFadingEffect());
-            effects.Add(new EPL2RSlidingEffect());
-            effects.Add(new EPRotatingEffect());
-            effects.Add(new NoneEffect());
+            effectList = new ArrayList();
+            effectList.Add(new EpFadingEffect());
+       //     effectList.Add(new EpL2RSlidingEffect());
+            effectList.Add(new EpRotatingEffect());
+        //    effectList.Add(new EpDefaultEffect());
+        }
+
+        public void Transition(Panel current, Panel next)
+        {
+            Transition(current, next, EffectType.Random);
         }
 
         public void Transition(Panel current, Panel next, EffectType type)
         {
-            try
-            {
-                // 遷移前Panelをキャプチャ
-                Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
-                Bitmap nextBmp = null;
+            Bitmap currentBitmap;
+            Bitmap nextBitmap;
+            EpDefaultEffect effect;
 
-                string nextBmpPath = next.Name + ".bmp";
-                if (System.IO.File.Exists(nextBmpPath))
+            try{
+                currentBitmap = GetPreviousCapturedImage(current, current.Name + ".bmp", false);    // 遷移前Panelをキャプチャ
+                nextBitmap = null;
+
+                string nextBitmapPath = next.Name + ".bmp";
+
+                if (System.IO.File.Exists(nextBitmapPath))
                 {
-                    nextBmp = new Bitmap(nextBmpPath);
+                    nextBitmap = new Bitmap(nextBitmapPath);
                 }
                 else
                 {
-                    nextBmp = GetPreviousCapturedImage(next, nextBmpPath, true); // 初回のみ
+                    nextBitmap = GetPreviousCapturedImage(next, nextBitmapPath, true);              // 初回のみ
                 }
-
-                // effectスタート
-                this.Visible = true;
-
+                
+                this.Visible = true;        // effectスタート
                 current.Visible = false;
 
-                // effectを実行
-                EPDefaultEffect effect = effects[(int)type] as EPDefaultEffect;
-                effect.DrawEffectImage(currentBmp, nextBmp, this);
+                if (type == EffectType.Random) {
+                    type = (EffectType)new System.Random().Next(effectList.Count);
+                }
+                effect = effectList[(int)type] as EpDefaultEffect;                  // effectを実行
+                effect.DrawEffectImage(currentBitmap, nextBitmap, this);
 
                 next.Visible = true;
+                this.Visible = false;       // effect終わり
 
-                // effect終わり
-                this.Visible = false;
-
-                currentBmp.Dispose();
-                nextBmp.Dispose();
+                currentBitmap.Dispose();
+                nextBitmap.Dispose();
             }
             catch (SystemException ex)
             {
@@ -103,58 +109,61 @@ namespace FormSample
 
         private Bitmap GetPreviousCapturedImage(Panel panel, string filePath, Boolean firstTime)
         {
-            Rectangle rect = RectangleToScreen(panel.Bounds);
-            Bitmap bmp = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);
+            Rectangle rectangle;
+            Bitmap bitmap;
+            ArrayList controls;
 
+            rectangle = RectangleToScreen(panel.Bounds);
+            bitmap = new Bitmap(rectangle.Width, rectangle.Height, PixelFormat.Format32bppArgb);
             if (firstTime)
             {
-                Application.DoEvents();
+                rectangle = RectangleToScreen(panel.Bounds);
+                
+                panel.DrawToBitmap(bitmap, panel.Bounds);   // 再帰的にコンテナ及びコントロールをキャプチャ
 
-                // 再帰的にコンテナ及びコントロールをキャプチャ
-                panel.DrawToBitmap(bmp, panel.Bounds);
-
-                ArrayList controls = GetAllControls(panel);
+                controls = GetAllControls(panel);
                 controls.Reverse(); // 背面から
                 foreach (Control c in controls)
                 {
-                    Rectangle rc = c.Bounds;
-                    Control tmp = c;
-                    while (tmp.Bounds.Location != panel.Bounds.Location)
+                    Rectangle rectangle2 = c.Bounds;
+                    Control control = c;
+                    while (control.Bounds.Location != panel.Bounds.Location)
                     {
-                        rc.X += tmp.Parent.Bounds.Location.X;
-                        rc.Y += tmp.Parent.Bounds.Location.Y;
-                        tmp = tmp.Parent;
+                        rectangle2.X += control.Parent.Bounds.Location.X;
+                        rectangle2.Y += control.Parent.Bounds.Location.Y;
+                        control = control.Parent;
                     }
-                    c.DrawToBitmap(bmp, rc);
+                    control.DrawToBitmap(bitmap, rectangle2);
                 }
             }
             else
             {
-                CaptureControl(panel, ref bmp);
+                CaptureControl(panel, ref bitmap);
             }
-            bmp.Save(filePath, ImageFormat.Bmp);    // 保存する場合
-            return bmp;
+            bitmap.Save(filePath, ImageFormat.Bmp);    // 保存する場合
+            return bitmap;
         }
 
         private ArrayList GetAllControls(Control top)
         {
-            ArrayList buf = new ArrayList();
+            ArrayList arrayList;
+
+            arrayList = new ArrayList();
             foreach (Control c in top.Controls)
             {
-                buf.AddRange(GetAllControls(c));
-                buf.Add(c);
+                arrayList.AddRange(GetAllControls(c));
+                arrayList.Add(c);
             }
-            return buf;
+            return arrayList;
         }
 
         public void SetSize(Form form)
         {
-            Rectangle clientRectangle = form.ClientRectangle;
-            this.Location = clientRectangle.Location;
-            this.Size = clientRectangle.Size;
+            Rectangle rectangle = form.ClientRectangle;
+            this.Location = rectangle.Location;
+            this.Size = rectangle.Size;
 
             this.Update();
-            Application.DoEvents();
         }
 
 
@@ -166,14 +175,17 @@ namespace FormSample
         /// </summary>
         /// <param name="ctrl">キャプチャするコントロール</param>
         /// <returns>取得できたイメージ</returns>
-        public Bitmap CaptureControl(Control ctrl, ref Bitmap bmp)
+        public Bitmap CaptureControl(Control control, ref Bitmap bitmap)
         {
-            Graphics memg = Graphics.FromImage(bmp);
-            IntPtr dc = memg.GetHdc();
-            PrintWindow(ctrl.Handle, dc, 0);
-            memg.ReleaseHdc(dc);
-            memg.Dispose();
-            return bmp;
+            Graphics g;
+            IntPtr hdc;
+            
+            g = Graphics.FromImage(bitmap);
+            hdc = g.GetHdc();
+            PrintWindow(control.Handle, hdc, 0);
+            g.ReleaseHdc(hdc);
+            g.Dispose();
+            return bitmap;
         }
     }
 }

@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FormSample
+namespace Effectable
 {
-    public class EPL2RSlidingEffect : EPDefaultEffect
+    public class EpL2RSlidingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, Control control)
         {
             //try
             //{

@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FormSample
+namespace Effectable
 {
-    public abstract class EPDefaultEffect
+    public class EpDefaultEffect
     {
-        public abstract void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl);
+        public virtual void DrawEffectImage(Bitmap current, Bitmap next, Control control)
+        {
+        }
     }
 }

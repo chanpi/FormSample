@@ -1,4 +1,4 @@
-﻿namespace FormSample
+﻿namespace Effectable
 {
     partial class EffectablePanel
     {

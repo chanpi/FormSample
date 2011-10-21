@@ -8,13 +8,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace FormSample
+namespace Effectable
 {
-    public class EPFadingEffect : EPDefaultEffect
+    public class EpFadingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, Control control)
         {
-            Graphics g = ctrl.CreateGraphics();
+            Graphics g = control.CreateGraphics();
 
             try
             {

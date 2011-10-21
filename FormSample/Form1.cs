@@ -13,7 +13,7 @@ namespace FormSample
     public partial class Form1 : Form
     {
         private ArrayList panelList = null;
-        private EffectablePanel myPanel = null;
+        private Effectable.EffectablePanel myPanel = null;
         private int panelIndex = 0;
         private int panelCount = 0;
 
@@ -32,7 +32,7 @@ namespace FormSample
             panelCount = panelList.Count;
 
             // エフェクト用のPanelを作成
-            myPanel = new EffectablePanel(this);
+            myPanel = new Effectable.EffectablePanel(this);
             this.Controls.Add(myPanel);
         }
 
@@ -44,7 +44,8 @@ namespace FormSample
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            myPanel.Transition(current, next, EffectablePanel.EffectType.Rotating);
+//            myPanel.Transition(current, next, Effectable.EffectablePanel.EffectType.Rotating);
+            myPanel.Transition(current, next);
         }
 
         #region EffectablePanelの描画を補助するイベントメソッド（Timer関連）

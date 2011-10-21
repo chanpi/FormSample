@@ -9,44 +9,48 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace FormSample
+namespace Effectable
 {
-    public class EPRotatingEffect : EPDefaultEffect
+    public class EpRotatingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, Control control)
         {
+            Bitmap doubleBufferingBitmap;   // ダブルバッファリング用画面
+            Graphics g;                                             // ダブルバッファリング用画面描画用Graphics
+            SolidBrush solidBrush;
+            Rectangle rectangle;
+            System.Drawing.Drawing2D.Matrix matrix;
+
             try
-            {
-                Bitmap doubleBufferingBmp = new Bitmap(current);        // ダブルバッファリング用画面
-                Graphics g = Graphics.FromImage(doubleBufferingBmp);    // ダブルバッファリング用画面描画用Graphics
-
+            {                
                 int deltaDegree = 10;
-                SolidBrush blackBrush = new SolidBrush(System.Drawing.Color.Black);
-                Rectangle rect = new Rectangle(0, 0, current.Width, current.Height);
+                
+                doubleBufferingBitmap = new Bitmap(current);        // ダブルバッファリング用画面
+                g = Graphics.FromImage(doubleBufferingBitmap);      // ダブルバッファリング用画面描画用Graphics
 
+                solidBrush = new SolidBrush(System.Drawing.Color.Black);
+                rectangle = new Rectangle(0, 0, current.Width, current.Height);
+                                
                 for (int angle = 0; angle <= 360; angle += deltaDegree)
                 {
-                    g.ResetTransform();     // リセット座標変換
-                    g.FillRectangle(blackBrush, rect);
+                    g.ResetTransform();                             // リセット座標変換
+                    g.FillRectangle(solidBrush, rectangle);
 
-                    System.Drawing.Drawing2D.Matrix mat = new System.Drawing.Drawing2D.Matrix();
+                    matrix = new System.Drawing.Drawing2D.Matrix();
+                    matrix.Translate(doubleBufferingBitmap.Width / 2, doubleBufferingBitmap.Height / 2, MatrixOrder.Append);   // 原点移動
+                    matrix.Rotate((float)angle);
+                    g.Transform = matrix;                           // 座標設定
 
-                    mat.Translate(doubleBufferingBmp.Width / 2, doubleBufferingBmp.Height / 2, MatrixOrder.Append);   // 原点移動
-                    mat.Rotate((float)angle);
-                    g.Transform = mat;      // 座標設定
+                    g.DrawImage(current, -doubleBufferingBitmap.Width / 2, -doubleBufferingBitmap.Height / 2);  // 画像の中心が(0, 0)になるように描画
 
-                    // 画像の中心が(0, 0)になるように描画
-                    g.DrawImage(current, -doubleBufferingBmp.Width / 2, -doubleBufferingBmp.Height / 2);
+                    ((EffectablePanel)control).pictureBox.Image = doubleBufferingBitmap;
 
-                    ((EffectablePanel)ctrl).pictureBox.Image = doubleBufferingBmp;
-                    //ctrl.BackgroundImage = displayBmp;
-                    ctrl.Refresh();
-
-                    Thread.Sleep(10);
-                    mat.Dispose();
+                    Application.DoEvents();
+                    Thread.Sleep(20);
+                    matrix.Dispose();
                 }
                 g.Dispose();
-                doubleBufferingBmp.Dispose();
+                doubleBufferingBitmap.Dispose();
             }
             catch(SystemException ex)
             {
