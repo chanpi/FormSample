@@ -11,33 +11,54 @@ namespace Effectable
 {
     public class EpL2RSlidingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Control control)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectablePanel effectablePanel)
         {
-            //try
-            //{
-            //    int step = 1;
-            //    Graphics g = ctrl.CreateGraphics();
-            //    Bitmap displayBmp = new Bitmap(current);
+            int step = 1;
+            Graphics bg;
+            Bitmap doubleBufferingBitmap;
+            SolidBrush solidBrush;
+            Rectangle rectangle;
+            Matrix matrix = null;
 
-            //    //SolidBrush bkBrush
+            try
+            {
+                doubleBufferingBitmap = new Bitmap(current);        // ダブルバッファリング用画面
+                bg = Graphics.FromImage(doubleBufferingBitmap);     // ダブルバッファリング用画面描画用Graphics
 
-            //    step = displayBmp.Width / 20;
-            //    if (step < 1)
-            //    {
-            //        step = 1;
-            //    }
+                solidBrush = new SolidBrush(System.Drawing.Color.Black);
+                rectangle = new Rectangle(0, 0, current.Width, current.Height);
 
-            //    for (int x = 0; x < displayBmp.Width; x += step)
-            //    {
-            //        g.ResetTransform();
-            //        Matrix mat = new Matrix();
-            //        g.FillRectangle(
-            //    }
-            //}
-            //catch(SystemException ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
+                step = doubleBufferingBitmap.Width / 200;
+                if (step < 1)
+                {
+                    step = 1;
+                }
+
+                for (int x = 0; x < doubleBufferingBitmap.Width; x += step)
+                {
+                    bg.ResetTransform();                        // リセット座標変換
+                    bg.FillRectangle(solidBrush, rectangle);
+
+                    matrix = new Matrix();
+                    matrix.Translate(x, 0, MatrixOrder.Append);    // 原点移動
+                    bg.Transform = matrix;                         // 座標設定
+
+                    bg.DrawImage(current, 0, 0);
+                    effectablePanel.pictureBox.Image = doubleBufferingBitmap;
+                    effectablePanel.Refresh();
+
+                    Application.DoEvents();
+                    matrix.Dispose();
+                }
+
+                bg.Dispose();
+                doubleBufferingBitmap.Dispose();
+                effectablePanel.pictureBox.Image = next;
+            }
+            catch (SystemException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

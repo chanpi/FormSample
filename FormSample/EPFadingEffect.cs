@@ -12,33 +12,30 @@ namespace Effectable
 {
     public class EpFadingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Control control)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectablePanel effectablePanel)
         {
-            Graphics g = control.CreateGraphics();
+            Graphics g = null;
+            effectablePanel.pictureBox.Visible = false;
 
             try
             {
+                g = effectablePanel.CreateGraphics();
+
                 // フェードアウト
                 for (int i = 10; i >= 1; i--)
                 {
-                    // 半透明で画像を描画
-                    DrawFadedImage(g, current, i * 0.1F);
+                    DrawFadedImage(g, current, i * 0.1F);   // 半透明で画像を描画
                     Application.DoEvents();
-
                     Thread.Sleep(50);
                 }
 
                 // フェードイン
                 for (int i = 0; i <= 9; i++)
                 {
-                    // 半透明で画像を描画
-                    DrawFadedImage(g, next, i * 0.1F);
+                    DrawFadedImage(g, next, i * 0.1F);  // 半透明で画像を描画
                     Application.DoEvents();
-
-                    // 一時停止
                     Thread.Sleep(50);
                 }
-
 
                 current.Dispose();
                 next.Dispose();
@@ -48,42 +45,41 @@ namespace Effectable
             {
                 Console.WriteLine(ex.Message);
             }
+
+            effectablePanel.pictureBox.Visible = true;
         }
 
-        private static void DrawFadedImage(Graphics g, Image img, float alpha)
+        private static void DrawFadedImage(Graphics g, Image image, float alpha)
         {
+            Bitmap doubleBufferingBitmap = null;    // ダブルバッファリング用画面
+            Graphics bg = null;                     // ダブルバッファリング用画面描画用Graphics
+            ColorMatrix colorMatrix = null;
+            ImageAttributes imageAttributes = null;
+
             try
             {
-                // 背景を用意する
-                Bitmap back = new Bitmap(img.Width, img.Height);
-                // backのGraphicsオブジェクトを取得
-                Graphics bg = Graphics.FromImage(back);
-                // 白で塗りつぶす
-                bg.Clear(Color.White);
+                doubleBufferingBitmap = new Bitmap(image.Width, image.Height);
+                bg = Graphics.FromImage(doubleBufferingBitmap);
+                bg.Clear(Color.White);  // 白で塗りつぶす
 
-                // ColorMatrixオブジェクトの作成
-                ColorMatrix cm = new ColorMatrix();
+                colorMatrix = new ColorMatrix();    // ColorMatrixオブジェクトの作成
                 // ColorMatrixの行列の値を変更して、アルファ値がalphaに変更されるようにする
-                cm.Matrix00 = 1;
-                cm.Matrix11 = 1;
-                cm.Matrix22 = 1;
-                cm.Matrix33 = alpha;
-                cm.Matrix44 = 1;
+                colorMatrix.Matrix00 = 1;
+                colorMatrix.Matrix11 = 1;
+                colorMatrix.Matrix22 = 1;
+                colorMatrix.Matrix33 = alpha;
+                colorMatrix.Matrix44 = 1;
 
-                // ImageAttributeオブジェクトの作成
-                ImageAttributes ia = new ImageAttributes();
-                // ColorMatrixを設定する
-                ia.SetColorMatrix(cm);
+                imageAttributes = new ImageAttributes();
+                imageAttributes.SetColorMatrix(colorMatrix);    // ColorMatrixを設定する
 
                 // ImageAttributesを使用して背景に描画
-                bg.DrawImage(img, new Rectangle(0, 0, img.Width, img.Height),
-                    0, 0, img.Width, img.Height, GraphicsUnit.Pixel, ia);
-                // 合成された画像を表示
-                g.DrawImage(back, 0, 0);
+                bg.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height),
+                    0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttributes);
+                g.DrawImage(doubleBufferingBitmap, 0, 0);
 
-                // リソースを開放する
                 bg.Dispose();
-                back.Dispose();
+                doubleBufferingBitmap.Dispose();
             }
             catch(SystemException ex)
             {

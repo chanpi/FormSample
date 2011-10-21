@@ -9,7 +9,7 @@ namespace Effectable
 {
     public class EpDefaultEffect
     {
-        public virtual void DrawEffectImage(Bitmap current, Bitmap next, Control control)
+        public virtual void DrawEffectImage(Bitmap current, Bitmap next, EffectablePanel effectablePanel)
         {
         }
     }

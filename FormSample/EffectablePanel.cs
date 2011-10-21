@@ -16,9 +16,8 @@ namespace Effectable
 {
     public partial class EffectablePanel : Panel
     {
-        public enum EffectType { Fading, Rotating, L2RSliding, None, Random };
+        public enum EffectType { Fading, Rotating, L2RSliding, Random };
         private ArrayList effectList = null;
-        private Hashtable bitmapTable = null;
 
         public PictureBox pictureBox = null;
 
@@ -26,9 +25,16 @@ namespace Effectable
         {
             InitializeComponent();
 
+            // PictureBoxの作成
             pictureBox = new PictureBox();
-            this.Controls.Add(pictureBox);
+
+            pictureBox.AutoSize = true;
+            pictureBox.BackColor = Color.Black;
+            pictureBox.Location = new Point(0, 0);
+            pictureBox.Size = new Size(this.Width, this.Height);
             pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Controls.Add(pictureBox);
 
             this.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Dock = System.Windows.Forms.DockStyle.Fill;            // 親コンテナにドッキング
@@ -38,26 +44,26 @@ namespace Effectable
             this.SetStyle(ControlStyles.Opaque, true);                  // 背景を描画しない（ちらつきの抑制）
             this.SetStyle(ControlStyles.UserPaint, true);               // OSではなく独自で描画する
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);    // WM_ERASEBKGND を無視
-            //this.SetStyle(ControlStyles.DoubleBuffer, true);          // 逆にちらつくのでコメントアウト
-            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);          // 逆にちらつくのでコメントアウト
-            this.DoubleBuffered = true;
+
+            // 逆にちらつくのでコメントアウト
+            //this.SetStyle(ControlStyles.DoubleBuffer, true);
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.DoubleBuffered = true;
 
             this.BringToFront();
             this.Visible = false;
 
             // エフェクト効果を行うクラスのインスタンスを生成
             CreateEffectInstances();
-
-            bitmapTable = new Hashtable();
         }
 
         private void CreateEffectInstances()
         {
             effectList = new ArrayList();
+
             effectList.Add(new EpFadingEffect());
-       //     effectList.Add(new EpL2RSlidingEffect());
             effectList.Add(new EpRotatingEffect());
-        //    effectList.Add(new EpDefaultEffect());
+            effectList.Add(new EpL2RSlidingEffect());
         }
 
         public void Transition(Panel current, Panel next)
@@ -71,7 +77,8 @@ namespace Effectable
             Bitmap nextBitmap;
             EpDefaultEffect effect;
 
-            try{
+            try
+            {
                 currentBitmap = GetPreviousCapturedImage(current, current.Name + ".bmp", false);    // 遷移前Panelをキャプチャ
                 nextBitmap = null;
 
@@ -85,18 +92,19 @@ namespace Effectable
                 {
                     nextBitmap = GetPreviousCapturedImage(next, nextBitmapPath, true);              // 初回のみ
                 }
-                
-                this.Visible = true;        // effectスタート
+
+                this.Visible = true;                                // effectスタート
                 current.Visible = false;
 
                 if (type == EffectType.Random) {
                     type = (EffectType)new System.Random().Next(effectList.Count);
                 }
-                effect = effectList[(int)type] as EpDefaultEffect;                  // effectを実行
+
+                effect = effectList[(int)type] as EpDefaultEffect;  // effectを実行
                 effect.DrawEffectImage(currentBitmap, nextBitmap, this);
 
                 next.Visible = true;
-                this.Visible = false;       // effect終わり
+                this.Visible = false;                               // effect終わり
 
                 currentBitmap.Dispose();
                 nextBitmap.Dispose();
@@ -138,7 +146,7 @@ namespace Effectable
             }
             else
             {
-                CaptureControl(panel, ref bitmap);
+                CaptureControls(panel, ref bitmap);
             }
             bitmap.Save(filePath, ImageFormat.Bmp);    // 保存する場合
             return bitmap;
@@ -146,9 +154,8 @@ namespace Effectable
 
         private ArrayList GetAllControls(Control top)
         {
-            ArrayList arrayList;
+            ArrayList arrayList = new ArrayList();
 
-            arrayList = new ArrayList();
             foreach (Control c in top.Controls)
             {
                 arrayList.AddRange(GetAllControls(c));
@@ -175,7 +182,7 @@ namespace Effectable
         /// </summary>
         /// <param name="ctrl">キャプチャするコントロール</param>
         /// <returns>取得できたイメージ</returns>
-        public Bitmap CaptureControl(Control control, ref Bitmap bitmap)
+        public Bitmap CaptureControls(Control control, ref Bitmap bitmap)
         {
             Graphics g;
             IntPtr hdc;
