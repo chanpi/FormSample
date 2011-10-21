@@ -11,8 +11,7 @@ namespace FormSample
     {
         public override void DrawEffectImage(Bitmap before, Bitmap after, Control ctrl)
         {
-            Graphics g = ctrl.CreateGraphics();
-
+            // 処理なし
         }
     }
 }

@@ -23,8 +23,9 @@ namespace FormSample
         public EffectablePanel(Form form)
         {
             InitializeComponent();
+            
             this.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Dock = System.Windows.Forms.DockStyle.Fill;            // 親コンテナにドッキング
             SetSize(form);
 
             this.SetStyle(ControlStyles.ResizeRedraw, true);

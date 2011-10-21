@@ -17,10 +17,6 @@ namespace FormSample
         {
             try
             {
-                //ctrl.SetStyle(ControlStyles.DoubleBuffer, true);
-                //ctrl.SetStyle(ControlStyles.UserPaint, true);
-                //ctrl.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-
                 Graphics g = ctrl.CreateGraphics();
 
                 Bitmap displayBmp = new Bitmap(current);
@@ -32,6 +28,7 @@ namespace FormSample
                 {
                     //Bitmap bmp = RotateBitmap(current, degree, current.Width / 2, current.Height / 2);
                     //g.DrawImage(current, new Point(0, 0));
+
                     g.ResetTransform();     // リセット座標変換
                     g.FillRectangle(bkBrush, rect);
 
