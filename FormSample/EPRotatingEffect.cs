@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace FormSample
 {
-    public class RotatingEffect : DefaultEffect
+    public class EPRotatingEffect : EPDefaultEffect
     {
         public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
         {

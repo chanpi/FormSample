@@ -54,9 +54,9 @@ namespace FormSample
         private void CreateEffectInstances()
         {
             effects = new ArrayList();
-            effects.Add(new FadingEffect());
-            effects.Add(new L2RSlidingEffect());
-            effects.Add(new RotatingEffect());
+            effects.Add(new EPFadingEffect());
+            effects.Add(new EPL2RSlidingEffect());
+            effects.Add(new EPRotatingEffect());
             effects.Add(new NoneEffect());
         }
 
@@ -84,7 +84,7 @@ namespace FormSample
                 current.Visible = false;
 
                 // effectを実行
-                DefaultEffect effect = effects[(int)type] as DefaultEffect;
+                EPDefaultEffect effect = effects[(int)type] as EPDefaultEffect;
                 effect.DrawEffectImage(currentBmp, nextBmp, this);
 
                 next.Visible = true;

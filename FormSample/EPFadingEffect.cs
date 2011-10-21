@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace FormSample
 {
-    public class FadingEffect : DefaultEffect
+    public class EPFadingEffect : EPDefaultEffect
     {
         public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
         {

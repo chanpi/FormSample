@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace FormSample
 {
-    public abstract class DefaultEffect
+    public abstract class EPDefaultEffect
     {
         public abstract void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl);
     }

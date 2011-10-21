@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FormSample
 {
-    public class L2RSlidingEffect : DefaultEffect
+    public class EPL2RSlidingEffect : EPDefaultEffect
     {
         public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
         {
