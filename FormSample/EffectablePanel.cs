@@ -16,9 +16,9 @@ namespace FormSample
 {
     public partial class EffectablePanel : Panel
     {
-        public enum EffectType { Fading, None };
+        public enum EffectType { Fading, L2RSliding, Rotating, None };
         private ArrayList effects = null;
-        //private Hashtable bmpContainer = null;
+        private Hashtable bmpContainer = null;
 
         public EffectablePanel(Form form)
         {
@@ -32,18 +32,23 @@ namespace FormSample
             this.SetStyle(ControlStyles.UserPaint, true);               // OSではなく独自で描画する
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);    // WM_ERASEBKGND を無視
             //this.SetStyle(ControlStyles.DoubleBuffer, true);          // 逆にちらつくのでコメントアウト
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);          // 逆にちらつくのでコメントアウト
 
             this.BringToFront();
             this.Visible = false;
 
             // エフェクト効果を行うクラスのインスタンスを生成
             CreateEffectInstances();
+
+            bmpContainer = new Hashtable();
         }
 
         private void CreateEffectInstances()
         {
             effects = new ArrayList();
             effects.Add(new FadingEffect());
+            effects.Add(new L2RSlidingEffect());
+            effects.Add(new RotatingEffect());
             effects.Add(new NoneEffect());
         }
 
@@ -51,11 +56,9 @@ namespace FormSample
         {
             try
             {
-                Bitmap nextBmp = null;
-                Graphics g = this.CreateGraphics();
-
                 // 遷移前Panelをキャプチャ
                 Bitmap currentBmp = GetPreviousCapturedImage(current, current.Name + ".bmp", false);
+                Bitmap nextBmp = null;
 
                 string nextBmpPath = next.Name + ".bmp";
                 if (System.IO.File.Exists(nextBmpPath))
@@ -72,10 +75,9 @@ namespace FormSample
 
                 current.Visible = false;
 
-                DefaultEffect effect = effects[(int)type] as DefaultEffect;
-
                 // effectを実行
-                effect.DrawEffectImage(currentBmp, nextBmp, g);
+                DefaultEffect effect = effects[(int)type] as DefaultEffect;
+                effect.DrawEffectImage(currentBmp, nextBmp, this);
 
                 next.Visible = true;
 
@@ -84,7 +86,6 @@ namespace FormSample
 
                 currentBmp.Dispose();
                 nextBmp.Dispose();
-                g.Dispose();
             }
             catch (SystemException ex)
             {
@@ -121,13 +122,6 @@ namespace FormSample
             }
             else
             {
-                //using (Graphics g = Graphics.FromImage(bmp))
-                //{
-                //    //panel.Refresh();
-                //    //Application.DoEvents();
-                //    //panel.DrawToBitmap(bmp, panel.Bounds);
-                //    //g.CopyFromScreen(rect.X, rect.Y, 0, 0, rect.Size, CopyPixelOperation.SourceCopy);
-                //}
                 CaptureControl(panel, ref bmp);
             }
             bmp.Save(filePath, ImageFormat.Bmp);    // 保存する場合

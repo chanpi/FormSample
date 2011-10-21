@@ -12,8 +12,10 @@ namespace FormSample
 {
     public class FadingEffect : DefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, Graphics g)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, Control ctrl)
         {
+            Graphics g = ctrl.CreateGraphics();
+
             try
             {
                 // フェードアウト
