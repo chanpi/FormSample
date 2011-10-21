@@ -17,18 +17,16 @@ namespace FormSample
         {
             try
             {
-                Graphics g = ctrl.CreateGraphics();
+                //Graphics g = ctrl.CreateGraphics();
 
                 Bitmap displayBmp = new Bitmap(current);
+                Graphics g = Graphics.FromImage(displayBmp);
                 int deltaDegree = 10;
                 SolidBrush bkBrush = new SolidBrush(System.Drawing.Color.Black);
                 Rectangle rect = new Rectangle(0, 0, current.Width, current.Height);
 
                 for (int degree = 0; degree <= 360; degree += deltaDegree)
                 {
-                    //Bitmap bmp = RotateBitmap(current, degree, current.Width / 2, current.Height / 2);
-                    //g.DrawImage(current, new Point(0, 0));
-
                     g.ResetTransform();     // リセット座標変換
                     g.FillRectangle(bkBrush, rect);
 
@@ -40,7 +38,9 @@ namespace FormSample
 
                     // 画像の中心が(0, 0)になるように描画
                     g.DrawImage(current, -displayBmp.Width / 2, -displayBmp.Height / 2);
-                    ctrl.BackgroundImage = displayBmp;
+
+                    ((EffectablePanel)ctrl).pictureBox.Image = displayBmp;
+                    //ctrl.BackgroundImage = displayBmp;
                     ctrl.Refresh();
 
                     Thread.Sleep(10);
@@ -55,21 +55,5 @@ namespace FormSample
             }
         }
 
-        //private Bitmap RotateBitmap(Bitmap bmp, float angle, int originX, int originY)
-        //{
-        //    Bitmap bmp2 = new Bitmap(bmp);
-        //    Graphics g = Graphics.FromImage(bmp2);
-        //    g.Clear(System.Drawing.Color.Black);
-
-        //    g.TranslateTransform(-originX, -originY);
-        //    g.RotateTransform(angle, MatrixOrder.Append);
-        //    g.TranslateTransform(originX, originY, MatrixOrder.Append);
-
-        //    g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-
-        //    g.DrawImageUnscaled(bmp, 0, 0);
-        //    g.Dispose();
-        //    return bmp2;
-        //}
     }
 }

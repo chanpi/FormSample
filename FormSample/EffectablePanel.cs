@@ -20,10 +20,16 @@ namespace FormSample
         private ArrayList effects = null;
         private Hashtable bmpContainer = null;
 
+        public PictureBox pictureBox = null;
+
         public EffectablePanel(Form form)
         {
             InitializeComponent();
-            
+
+            pictureBox = new PictureBox();
+            this.Controls.Add(pictureBox);
+            pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Dock = System.Windows.Forms.DockStyle.Fill;            // 親コンテナにドッキング
             SetSize(form);
@@ -34,6 +40,7 @@ namespace FormSample
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);    // WM_ERASEBKGND を無視
             //this.SetStyle(ControlStyles.DoubleBuffer, true);          // 逆にちらつくのでコメントアウト
             //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);          // 逆にちらつくのでコメントアウト
+            this.DoubleBuffered = true;
 
             this.BringToFront();
             this.Visible = false;
