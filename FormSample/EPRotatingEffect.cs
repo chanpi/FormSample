@@ -30,7 +30,9 @@ namespace Effectable
 
                 solidBrush = new SolidBrush(System.Drawing.Color.Black);
                 rectangle = new Rectangle(0, 0, current.Width, current.Height);
-                                
+
+                //Application.DoEvents();
+
                 for (int angle = 0; angle <= 360; angle += deltaDegree)
                 {
                     bg.ResetTransform();                             // リセット座標変換
@@ -43,11 +45,16 @@ namespace Effectable
 
                     bg.DrawImage(current, -doubleBufferingBitmap.Width / 2, -doubleBufferingBitmap.Height / 2);  // 画像の中心が(0, 0)になるように描画
                     effectablePanel.pictureBox.Image = doubleBufferingBitmap;
+                    effectablePanel.Refresh();
 
-                    Application.DoEvents();
+                    //Application.DoEvents();
+
                     Thread.Sleep(20);
                     matrix.Dispose();
                 }
+
+                //Application.DoEvents();
+
                 bg.Dispose();
                 doubleBufferingBitmap.Dispose();
             }

@@ -25,15 +25,17 @@ namespace Effectable
                 for (int i = 10; i >= 1; i--)
                 {
                     DrawFadedImage(g, current, i * 0.1F);   // 半透明で画像を描画
-                    Application.DoEvents();
+                    //Application.DoEvents();
                     Thread.Sleep(50);
                 }
+
+                Application.DoEvents();
 
                 // フェードイン
                 for (int i = 0; i <= 9; i++)
                 {
                     DrawFadedImage(g, next, i * 0.1F);  // 半透明で画像を描画
-                    Application.DoEvents();
+                    //Application.DoEvents();
                     Thread.Sleep(50);
                 }
 

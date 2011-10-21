@@ -28,11 +28,13 @@ namespace Effectable
                 solidBrush = new SolidBrush(System.Drawing.Color.Black);
                 rectangle = new Rectangle(0, 0, current.Width, current.Height);
 
-                step = doubleBufferingBitmap.Width / 200;
+                step = effectablePanel.Width / 50;//doubleBufferingBitmap.Width / 50;
                 if (step < 1)
                 {
                     step = 1;
                 }
+
+                //Application.DoEvents();
 
                 for (int x = 0; x < doubleBufferingBitmap.Width; x += step)
                 {
@@ -50,6 +52,8 @@ namespace Effectable
                     Application.DoEvents();
                     matrix.Dispose();
                 }
+
+                //Application.DoEvents();
 
                 bg.Dispose();
                 doubleBufferingBitmap.Dispose();

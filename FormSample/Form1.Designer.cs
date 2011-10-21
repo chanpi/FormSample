@@ -31,31 +31,31 @@
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 3000;
+            this.timer1.Interval = 6000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // panel1
@@ -70,6 +70,23 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(678, 324);
             this.panel1.TabIndex = 0;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(374, 202);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(100, 96);
+            this.richTextBox1.TabIndex = 2;
+            this.richTextBox1.Text = "test";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(447, 137);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(120, 88);
+            this.listBox1.TabIndex = 1;
             // 
             // monthCalendar1
             // 
@@ -89,6 +106,53 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(678, 324);
             this.panel2.TabIndex = 1;
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.panel4.Controls.Add(this.listBox2);
+            this.panel4.Controls.Add(this.panel5);
+            this.panel4.Location = new System.Drawing.Point(43, 61);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(238, 218);
+            this.panel4.TabIndex = 2;
+            // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 12;
+            this.listBox2.Location = new System.Drawing.Point(14, 127);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(120, 88);
+            this.listBox2.TabIndex = 1;
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.panel5.Controls.Add(this.label1);
+            this.panel5.Controls.Add(this.button3);
+            this.panel5.Location = new System.Drawing.Point(48, 40);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(141, 105);
+            this.panel5.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(27, 60);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(53, 60);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -128,70 +192,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(447, 137);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 88);
-            this.listBox1.TabIndex = 1;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(374, 202);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(100, 96);
-            this.richTextBox1.TabIndex = 2;
-            this.richTextBox1.Text = "test";
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.panel4.Controls.Add(this.listBox2);
-            this.panel4.Controls.Add(this.panel5);
-            this.panel4.Location = new System.Drawing.Point(43, 61);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(238, 218);
-            this.panel4.TabIndex = 2;
-            // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.panel5.Controls.Add(this.label1);
-            this.panel5.Controls.Add(this.button3);
-            this.panel5.Location = new System.Drawing.Point(48, 40);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(141, 105);
-            this.panel5.TabIndex = 0;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(53, 60);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 12);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "label1";
-            // 
-            // listBox2
-            // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 12;
-            this.listBox2.Location = new System.Drawing.Point(14, 127);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(120, 88);
-            this.listBox2.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -209,11 +209,11 @@
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

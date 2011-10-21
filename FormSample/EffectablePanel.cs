@@ -17,9 +17,10 @@ namespace Effectable
     public partial class EffectablePanel : Panel
     {
         public enum EffectType { Fading, Rotating, L2RSliding, Random };
-        private ArrayList effectList = null;
-
         public PictureBox pictureBox = null;
+
+        private ArrayList effectList = null;
+        private Random random;
 
         public EffectablePanel(Form form)
         {
@@ -55,6 +56,8 @@ namespace Effectable
 
             // エフェクト効果を行うクラスのインスタンスを生成
             CreateEffectInstances();
+
+            random = new Random();
         }
 
         private void CreateEffectInstances()
@@ -97,8 +100,10 @@ namespace Effectable
                 current.Visible = false;
 
                 if (type == EffectType.Random) {
-                    type = (EffectType)new System.Random().Next(effectList.Count);
+                    type = (EffectType)random.Next(effectList.Count);
                 }
+
+                Console.WriteLine(type.ToString());
 
                 effect = effectList[(int)type] as EpDefaultEffect;  // effectを実行
                 effect.DrawEffectImage(currentBitmap, nextBitmap, this);
@@ -125,8 +130,6 @@ namespace Effectable
             bitmap = new Bitmap(rectangle.Width, rectangle.Height, PixelFormat.Format32bppArgb);
             if (firstTime)
             {
-                rectangle = RectangleToScreen(panel.Bounds);
-                
                 panel.DrawToBitmap(bitmap, panel.Bounds);   // 再帰的にコンテナ及びコントロールをキャプチャ
 
                 controls = GetAllControls(panel);
@@ -141,7 +144,7 @@ namespace Effectable
                         rectangle2.Y += control.Parent.Bounds.Location.Y;
                         control = control.Parent;
                     }
-                    control.DrawToBitmap(bitmap, rectangle2);
+                    c.DrawToBitmap(bitmap, rectangle2);
                 }
             }
             else
