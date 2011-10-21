@@ -24,17 +24,19 @@ namespace FormSample
         {
             InitializeComponent();
             this.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Dock = System.Windows.Forms.DockStyle.Fill;
+            SetSize(form);
 
-            Rectangle clientRectangle = form.ClientRectangle;
-            this.Location = clientRectangle.Location;
-            this.Size = clientRectangle.Size;
-            this.BackColor = Color.Red;                 // Test TODO : Delete
-            this.SetStyle(ControlStyles.Opaque, true);  // 背景を描画しない（ちらつきの抑制）
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.Opaque, true);                  // 背景を描画しない（ちらつきの抑制）
+            this.SetStyle(ControlStyles.UserPaint, true);               // OSではなく独自で描画する
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);    // WM_ERASEBKGND を無視
+            //this.SetStyle(ControlStyles.DoubleBuffer, true);          // 逆にちらつくのでコメントアウト
 
             this.BringToFront();
             this.Visible = false;
 
-            // エフェクト効果を行う
+            // エフェクト効果を行うクラスのインスタンスを生成
             CreateEffectInstances();
         }
 
@@ -111,5 +113,14 @@ namespace FormSample
             return bmp;
         }
 
+        public void SetSize(Form form)
+        {
+            Rectangle clientRectangle = form.ClientRectangle;
+            this.Location = clientRectangle.Location;
+            this.Size = clientRectangle.Size;
+
+            this.Update();
+            Application.DoEvents();
+        }
     }
 }

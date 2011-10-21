@@ -46,5 +46,56 @@ namespace FormSample
             Panel next = panelList[panelIndex] as Panel;
             myPanel.Transition(current, next, EffectablePanel.EffectType.Fading);
         }
+
+        // Resize開始
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            TimerStop();
+        }
+
+        // Resizeや移動の完了
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            TimerStart();
+        }
+
+        // 最大化・最小化に対応(Form1_ResizeEndでは最大化・最小化イベントに対応できない)
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            TimerStart();
+            myPanel.SetSize(this);
+        }
+
+        // フォームの移動開始
+        private void Form1_Move(object sender, EventArgs e)
+        {
+            TimerStop();
+        }
+
+        // Formが描画された瞬間Moveイベントが発生し、Form1_Moveが呼ばれTimerはストップするため、再度有効化する
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            TimerStart();
+        }
+
+        private void TimerStart()
+        {
+            if (!timer1.Enabled)
+            {
+                timer1.Start();
+                Console.WriteLine("Timer is Started.");
+            }
+        }
+
+        private void TimerStop()
+        {
+            if (timer1.Enabled)
+            {
+                timer1.Stop();
+                Console.WriteLine("Timer is Stopped.");
+            }
+        }
+
     }
 }
