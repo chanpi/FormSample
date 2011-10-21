@@ -43,13 +43,11 @@ namespace Effectable
 
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.SetStyle(ControlStyles.Opaque, true);                  // 背景を描画しない（ちらつきの抑制）
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);               // OSではなく独自で描画する
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);    // WM_ERASEBKGND を無視
-
-            // 逆にちらつくのでコメントアウト
-            //this.SetStyle(ControlStyles.DoubleBuffer, true);
-            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            //this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
 
             this.BringToFront();
             this.Visible = false;
