@@ -16,7 +16,7 @@ namespace Effectable
 {
     public partial class EffectablePanel : Panel
     {
-        public enum EffectType { Fading, Rotating, L2RSliding, Random };
+        public enum EffectType { Fading, Rotating, L2RSliding, Random, None };
         public PictureBox pictureBox = null;
 
         private ArrayList effectList = null;
@@ -102,7 +102,15 @@ namespace Effectable
                     type = (EffectType)random.Next(effectList.Count);
                 }
 
-                effect = effectList[(int)type] as EpDefaultEffect;  // effectを実行
+                if (type == EffectType.None)
+                {
+                    effect = new EpDefaultEffect();
+                }
+                else
+                {
+                    effect = effectList[(int)type] as EpDefaultEffect;
+                }
+                
                 effect.DrawEffectImage(currentBitmap, nextBitmap, this);
 
                 next.Visible = true;

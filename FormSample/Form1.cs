@@ -88,7 +88,7 @@ namespace FormSample
             if (!timer1.Enabled)
             {
                 timer1.Start();
-                Console.WriteLine("Timer is Started.");
+             //   Console.WriteLine("Timer is Started.");
             }
         }
 
@@ -97,7 +97,7 @@ namespace FormSample
             if (timer1.Enabled)
             {
                 timer1.Stop();
-                Console.WriteLine("Timer is Stopped.");
+             //   Console.WriteLine("Timer is Stopped.");
             }
         }
         #endregion
