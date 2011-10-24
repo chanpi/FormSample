@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Effectable
+namespace Effecing
 {
     public class EpRotatingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectablePanel effectablePanel)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effecingPanel)
         {
             Bitmap doubleBufferingBitmap = null;    // ダブルバッファリング用画面
             Graphics bg = null;                     // ダブルバッファリング用画面描画用Graphics
@@ -42,8 +42,8 @@ namespace Effectable
                     bg.Transform = matrix;                           // 座標設定
 
                     bg.DrawImage(current, -doubleBufferingBitmap.Width / 2, -doubleBufferingBitmap.Height / 2);  // 画像の中心が(0, 0)になるように描画
-                    effectablePanel.pictureBox.Image = doubleBufferingBitmap;
-                    effectablePanel.pictureBox.Refresh();
+                    effecingPanel.pictureBox.Image = doubleBufferingBitmap;
+                    effecingPanel.pictureBox.Refresh();
 
                     //Application.DoEvents();
 

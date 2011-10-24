@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Effectable
+namespace Effecing
 {
     public class EpL2RSlidingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectablePanel effectablePanel)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effecingPanel)
         {
             int step = 1;
             Graphics bg;
@@ -53,13 +53,13 @@ namespace Effectable
                     bg.DrawImage(next, 0, 0);
                     matrix.Dispose();
 
-                    effectablePanel.pictureBox.Image = doubleBufferingBitmap;
-                    effectablePanel.pictureBox.Refresh();
+                    effecingPanel.pictureBox.Image = doubleBufferingBitmap;
+                    effecingPanel.pictureBox.Refresh();
                 }
 
                 bg.Dispose();
                 doubleBufferingBitmap.Dispose();
-                effectablePanel.pictureBox.Image = next;
+                effecingPanel.pictureBox.Image = next;
             }
             catch (SystemException ex)
             {

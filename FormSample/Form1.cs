@@ -13,7 +13,7 @@ namespace FormSample
     public partial class Form1 : Form
     {
         private ArrayList panelList = null;
-        private Effectable.EffectablePanel myPanel = null;
+        private Effecing.EffectingPanel myPanel = null;
         private int panelIndex = 0;
         private int panelCount = 0;
 
@@ -32,7 +32,7 @@ namespace FormSample
             panelCount = panelList.Count;
 
             // エフェクト用のPanelを作成
-            myPanel = new Effectable.EffectablePanel(this);
+            myPanel = new Effecing.EffectingPanel(this);
             this.Controls.Add(myPanel);
         }
 
@@ -44,11 +44,11 @@ namespace FormSample
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            //myPanel.Transition(ref current, ref next, Effectable.EffectablePanel.EffectType.L2RSliding);
+            //myPanel.Transition(ref current, ref next, Effecing.EffecingPanel.EffectType.L2RSliding);
             myPanel.Transition(ref current, ref next);
         }
 
-        #region EffectablePanelの描画を補助するイベントメソッド（Timer関連）
+        #region EffecingPanelの描画を補助するイベントメソッド（Timer関連）
 
         // Resize開始
         private void Form1_Resize(object sender, EventArgs e)
