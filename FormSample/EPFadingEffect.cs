@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Effecing
+namespace Effecting
 {
     public class EpFadingEffect : EpDefaultEffect
     {

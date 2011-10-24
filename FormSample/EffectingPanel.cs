@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Effecing
+namespace Effecting
 {
     public partial class EffectingPanel : Panel
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Effecing
+namespace Effecting
 {
     public class EpRotatingEffect : EpDefaultEffect
     {

@@ -1,4 +1,4 @@
-﻿namespace Effecing
+﻿namespace Effecting
 {
     partial class EffectingPanel
     {

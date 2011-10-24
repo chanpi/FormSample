@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Effecing
+namespace Effecting
 {
     public class EpL2RSlidingEffect : EpDefaultEffect
     {

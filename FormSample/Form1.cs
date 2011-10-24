@@ -13,7 +13,7 @@ namespace FormSample
     public partial class Form1 : Form
     {
         private ArrayList panelList = null;
-        private Effecing.EffectingPanel myPanel = null;
+        private Effecting.EffectingPanel myPanel = null;
         private int panelIndex = 0;
         private int panelCount = 0;
 
@@ -32,7 +32,7 @@ namespace FormSample
             panelCount = panelList.Count;
 
             // エフェクト用のPanelを作成
-            myPanel = new Effecing.EffectingPanel(this);
+            myPanel = new Effecting.EffectingPanel(this);
             this.Controls.Add(myPanel);
         }
 
