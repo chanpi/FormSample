@@ -8,11 +8,11 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Effectable
+namespace Effecing
 {
     public class EpFadingEffect : EpDefaultEffect
     {
-        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effectablePanel)
+        public override void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effecingPanel)
         {
             Bitmap doubleBufferingBitmap = null;    // ダブルバッファリング用画面
             Graphics bg = null;                     // ダブルバッファリング用画面描画用Graphics
@@ -43,8 +43,8 @@ namespace Effectable
                     bg.DrawImage(current, rectangle, 0, 0, doubleBufferingBitmap.Width, doubleBufferingBitmap.Height, GraphicsUnit.Pixel, imageAttributes);
 
                     Thread.Sleep(10);
-                    effectablePanel.pictureBox.Image = doubleBufferingBitmap;
-                    effectablePanel.pictureBox.Refresh();
+                    effecingPanel.pictureBox.Image = doubleBufferingBitmap;
+                    effecingPanel.pictureBox.Refresh();
                 }
                 for (float alpha = 0.0f; alpha <= 1.0f; alpha += 0.05f)
                 {
@@ -54,8 +54,8 @@ namespace Effectable
                     bg.DrawImage(next, rectangle, 0, 0, doubleBufferingBitmap.Width, doubleBufferingBitmap.Height, GraphicsUnit.Pixel, imageAttributes);
 
                     Thread.Sleep(10);
-                    effectablePanel.pictureBox.Image = doubleBufferingBitmap;
-                    effectablePanel.pictureBox.Refresh();
+                    effecingPanel.pictureBox.Image = doubleBufferingBitmap;
+                    effecingPanel.pictureBox.Refresh();
                 }
                 bg.Dispose();
             }

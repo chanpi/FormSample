@@ -83,11 +83,11 @@
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EffectablePanel.cs">
+    <Compile Include="EffectingPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EffectablePanel.Designer.cs">
-      <DependentUpon>EffectablePanel.cs</DependentUpon>
+    <Compile Include="EffectingPanel.Designer.cs">
+      <DependentUpon>EffectingPanel.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -102,8 +102,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="EffectablePanel.resx">
-      <DependentUpon>EffectablePanel.cs</DependentUpon>
+    <EmbeddedResource Include="EffectingPanel.resx">
+      <DependentUpon>EffectingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

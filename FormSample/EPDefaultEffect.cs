@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Effectable
+namespace Effecing
 {
     public class EpDefaultEffect
     {
-        public virtual void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effectablePanel)
+        public virtual void DrawEffectImage(Bitmap current, Bitmap next, EffectingPanel effecingPanel)
         {
         }
     }
