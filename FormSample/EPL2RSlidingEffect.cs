@@ -27,12 +27,15 @@ namespace Effecting
 
                 solidBrush = new SolidBrush(System.Drawing.Color.Black);
                 rectangle = new Rectangle(0, 0, current.Width, current.Height);
+				matrix = new Matrix();
 
                 step = doubleBufferingBitmap.Width / 50;
                 if (step < 1)
                 {
                     step = 1;
                 }
+					
+				ResetInterval();
 
                 for (int x = 0; x < doubleBufferingBitmap.Width; x += step)
                 {
@@ -40,25 +43,27 @@ namespace Effecting
                     bg.FillRectangle(solidBrush, rectangle);
 
                     // current画像
-                    matrix = new Matrix();
+                    matrix.Reset();
                     matrix.Translate(x, 0, MatrixOrder.Append);    // 原点移動
                     bg.Transform = matrix;                         // 座標設定
                     bg.DrawImage(current, 0, 0);
-                    matrix.Dispose();
-
+                    
                     // next画像
-                    matrix = new Matrix();
-                    matrix.Translate(x - doubleBufferingBitmap.Width, 0, MatrixOrder.Append);
+					matrix.Reset();
+					matrix.Translate(x - doubleBufferingBitmap.Width, 0, MatrixOrder.Append);
                     bg.Transform = matrix;
                     bg.DrawImage(next, 0, 0);
-                    matrix.Dispose();
-
+                    
                     effecingPanel.pictureBox.Image = doubleBufferingBitmap;
                     effecingPanel.pictureBox.Refresh();
+					
+					DoEventAtIntervals();
                 }
 
+				matrix.Dispose();
                 bg.Dispose();
                 doubleBufferingBitmap.Dispose();
+
                 effecingPanel.pictureBox.Image = next;
             }
             catch (SystemException ex)

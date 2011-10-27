@@ -44,7 +44,7 @@ namespace FormSample
                 panelIndex = 0;
             }
             Panel next = panelList[panelIndex] as Panel;
-            //myPanel.Transition(ref current, ref next, Effecing.EffecingPanel.EffectType.L2RSliding);
+			//myPanel.Transition(ref current, ref next, Effecting.EffectingPanel.EffectType.L2RSliding);
             myPanel.Transition(ref current, ref next);
         }
 

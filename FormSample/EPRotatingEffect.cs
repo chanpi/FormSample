@@ -24,19 +24,21 @@ namespace Effecting
             try
             {                
                 int deltaDegree = 10;
-                
+					
                 doubleBufferingBitmap = new Bitmap(current);
                 bg = Graphics.FromImage(doubleBufferingBitmap);
 
-                solidBrush = new SolidBrush(System.Drawing.Color.Black);
+				solidBrush = new SolidBrush(System.Drawing.Color.Black);
                 rectangle = new Rectangle(0, 0, current.Width, current.Height);
-
-                for (int angle = 0; angle <= 360; angle += deltaDegree)
+				matrix = new Matrix();
+				
+				ResetInterval();
+				for (int angle = 0; angle <= 360; angle += deltaDegree)
                 {
                     bg.ResetTransform();                             // リセット座標変換
                     bg.FillRectangle(solidBrush, rectangle);
 
-                    matrix = new Matrix();
+                    matrix.Reset();
                     matrix.Translate(doubleBufferingBitmap.Width / 2, doubleBufferingBitmap.Height / 2, MatrixOrder.Append);   // 原点移動
                     matrix.Rotate((float)angle);
                     bg.Transform = matrix;                           // 座標設定
@@ -45,13 +47,12 @@ namespace Effecting
                     effecingPanel.pictureBox.Image = doubleBufferingBitmap;
                     effecingPanel.pictureBox.Refresh();
 
-                    //Application.DoEvents();
-
-                    Thread.Sleep(20);
-                    matrix.Dispose();
+					Thread.Sleep(20);
+					DoEventAtIntervals();
                 }
 
-                bg.Dispose();
+				matrix.Dispose();
+				bg.Dispose();
                 doubleBufferingBitmap.Dispose();
             }
             catch(SystemException ex)

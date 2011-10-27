@@ -34,6 +34,8 @@ namespace Effecting
                 colorMatrix = new ColorMatrix();
                 imageAttributes = new ImageAttributes();
 
+				ResetInterval();
+
                 // フェードアウト
                 for (float alpha = 0.9f; alpha >= 0.0f; alpha -= 0.05f)
                 {
@@ -43,9 +45,12 @@ namespace Effecting
                     bg.DrawImage(current, rectangle, 0, 0, doubleBufferingBitmap.Width, doubleBufferingBitmap.Height, GraphicsUnit.Pixel, imageAttributes);
 
                     Thread.Sleep(10);
+
                     effecingPanel.pictureBox.Image = doubleBufferingBitmap;
                     effecingPanel.pictureBox.Refresh();
-                }
+				
+					DoEventAtIntervals();
+				}
                 for (float alpha = 0.0f; alpha <= 1.0f; alpha += 0.05f)
                 {
                     bg.FillRectangle(solidBrush, rectangle);
@@ -54,8 +59,11 @@ namespace Effecting
                     bg.DrawImage(next, rectangle, 0, 0, doubleBufferingBitmap.Width, doubleBufferingBitmap.Height, GraphicsUnit.Pixel, imageAttributes);
 
                     Thread.Sleep(10);
-                    effecingPanel.pictureBox.Image = doubleBufferingBitmap;
+					
+					effecingPanel.pictureBox.Image = doubleBufferingBitmap;
                     effecingPanel.pictureBox.Refresh();
+
+					DoEventAtIntervals();
                 }
                 bg.Dispose();
             }
